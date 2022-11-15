@@ -44,8 +44,7 @@ class BaseBot(object):
         action = self.action(ctx)
 
         if action not in self.__allowed_actions__:
-            msg = 'Bot#%s executing not allowed action: %s' % (
-                ctx['player_pk'], action)
+            msg = f"Bot#{ctx['player_pk']} executing not allowed action: {action}"
             logging.warning(msg)
             return
 
@@ -58,7 +57,7 @@ class BaseBot(object):
 
 
 def make_local_bot(arg):
-    __import__('strategypy.bots.{}'.format(arg))
+    __import__(f'strategypy.bots.{arg}')
     bot_module = getattr(bots, arg)
 
     class LocalBot(BaseBot):

@@ -10,11 +10,7 @@ import six
 def max_from_dict(dictionary):
     items = list(dictionary.items())
     random.shuffle(items)
-    result = max(
-        items,
-        key=operator.itemgetter(1)
-    )[0]
-    return result
+    return max(items, key=operator.itemgetter(1))[0]
 
 
 def get_me_closer_to(ctx, my_position, their_position):
@@ -30,14 +26,13 @@ def get_me_closer_to(ctx, my_position, their_position):
     move_left = 1 - (X - dx) / X if dx > 0 else 0.0
     move_right = 1 - (X + dx) / X if dx < 0 else 0.0
 
-    result = {
+    return {
         'move up': move_up,
         'move down': move_down,
         'move left': move_left,
         'move right': move_right,
-        None: 0.0
+        None: 0.0,
     }
-    return result
 
 
 class Bot():
@@ -76,17 +71,12 @@ class Bot():
     # UTILS
     @staticmethod
     def range_func(*args):
-        if six.PY2:
-            return xrange(*args)
-        else:
-            return range(*args)
+        return xrange(*args) if six.PY2 else range(*args)
 
     def _eval_weighted_action(self, action, rules_actions):
-        value = sum(
-            v * rules_actions[k][action]
-            for k, v in six.iteritems(self.rules)
+        return sum(
+            v * rules_actions[k][action] for k, v in six.iteritems(self.rules)
         )
-        return value
 
     def get_danger_positions(self, initial, final):
         x_initial, y_initial = initial
@@ -154,8 +144,7 @@ class Bot():
             sum(y for _, y in allies) / n
         )
 
-        result = get_me_closer_to(ctx, my_position, avg_position)
-        return result
+        return get_me_closer_to(ctx, my_position, avg_position)
 
     def outnumber_isolated_enemies(self, ctx):
         board = ctx['current_data']
@@ -164,11 +153,7 @@ class Bot():
         x, y = my_position
         allies = board[pk].values()
         enemies = [v.values() for k, v in six.iteritems(board) if k != pk][0]
-        close_allies = sum(
-            1
-            for ax, ay in allies
-            if abs(x - ax) <= 3 and abs(y - ay) <= 3
-        )
+        close_allies = sum(abs(x - ax) <= 3 and abs(y - ay) <= 3 for ax, ay in allies)
         close_enemies = [
             (ex, ey)
             for ex, ey in enemies
@@ -205,9 +190,7 @@ class Bot():
         }
 
         target_position = max_from_dict(distances_from_avg)
-        result = get_me_closer_to(ctx, my_position, target_position)
-
-        return result
+        return get_me_closer_to(ctx, my_position, target_position)
 
     def risk_of_dieing(self, ctx):
         board = ctx['current_data']
@@ -236,10 +219,7 @@ class Bot():
             close_allies = allies & close_positions
 
             diff = len(close_allies) - len(close_enemies)
-            if diff > 0:
-                result[k] = 1.0
-            else:
-                result[k] = 1.0 + (diff / len(danger_positions))
+            result[k] = 1.0 if diff > 0 else 1.0 + (diff / len(danger_positions))
         return result
 
 bot = Bot()

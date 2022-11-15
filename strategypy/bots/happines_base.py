@@ -34,11 +34,7 @@ class Bot():
         distances = deepcopy(self.distance_template)
         for other_player_pk, units in current_frame.items():
 
-            if other_player_pk == player_pk:
-                bot_type = 'friends'
-            else:
-                bot_type = 'enemies'
-
+            bot_type = 'friends' if other_player_pk == player_pk else 'enemies'
             for unit_pk, (ox, oy) in units.items():
 
                 for direction, (dx, dy) in self.directions.items():
@@ -66,8 +62,6 @@ class Bot():
         max_hap = max(res)[0]
 
         return random.choice([d for h,d in res if h == max_hap])
-
-        return happiest[0]
 
 
     def action(self, ctx):

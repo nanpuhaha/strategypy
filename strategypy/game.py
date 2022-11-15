@@ -49,12 +49,10 @@ class Game(object):
         self.data.append(snapshot)
 
     def current_data(self):
-        snapshot = {}
-        for player in self.players:
-            snapshot[player.pk] = {}
-            for unit in player.units:
-                snapshot[player.pk][unit.pk] = unit.current_cell
-        return snapshot
+        return {
+            player.pk: {unit.pk: unit.current_cell for unit in player.units}
+            for player in self.players
+        }
 
     def build_json_data(self):
         players = {
@@ -115,11 +113,7 @@ class Game(object):
             player_units = current_data[player_pk].values()
 
             killers = []
-            if six.PY2:
-                range_func = xrange
-            else:
-                range_func = range
-
+            range_func = xrange if six.PY2 else range
             allies, enemies = 0, 0
             for xd in range_func(-1, 2):
                 for yd in range_func(-1, 2):

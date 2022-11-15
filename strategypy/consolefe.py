@@ -10,10 +10,7 @@ import six
 def print_frames(output_dict):
     grid_size = output_dict['grid_size']
 
-    empty_grid = [
-        [' '] * grid_size[1]
-        for i in range(grid_size[0])
-    ]
+    empty_grid = [[' '] * grid_size[1] for _ in range(grid_size[0])]
 
     print('-' * (grid_size[1] + 2))
 
@@ -44,21 +41,21 @@ def print_summary(output_dict):
 
     winner = None if winner is None else players[str(winner)]
     if winner is None:
-        print('No player won and the game ended in {} turns'.format(turns))
+        print(f'No player won and the game ended in {turns} turns')
     else:
-        print('Player {} won in {} turns'.format(winner, turns))
-    print('Initial unit count: {}'.format(initial_count))
-    print('Final unit count: {}'.format(final_count))
+        print(f'Player {winner} won in {turns} turns')
+    print(f'Initial unit count: {initial_count}')
+    print(f'Final unit count: {final_count}')
 
     for player in all_players.values():
-        print('Player {} killed: '.format(player['name']), end="")
+        print(f"Player {player['name']} killed: ", end="")
         for killed_player, num_times in player['has_killed'].items():
-            print('{} x {}, '.format(killed_player, num_times), end="")
+            print(f'{killed_player} x {num_times}, ', end="")
         print()
     for player in all_players.values():
-        print('Player {} was killed by: '.format(player['name']), end="")
+        print(f"Player {player['name']} was killed by: ", end="")
         for killed_player, num_times in player['was_killed_by'].items():
-            print('{} x {}, '.format(killed_player, num_times), end="")
+            print(f'{killed_player} x {num_times}, ', end="")
         print()
 
 

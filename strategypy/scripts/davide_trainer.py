@@ -44,15 +44,12 @@ def play_game(rules):
 
     davide_units = result['frames'][-1].get('0', [])
     is_davide_winner = result['winner'] == 0
-    utility = len(davide_units) * is_davide_winner
-
-    return utility
+    return len(davide_units) * is_davide_winner
 
 
 def play_games(rules, n=5):
     results = [play_game(rules) for _ in xrange(0, n)]
-    avg = sum(results) / float(len(results))
-    return avg
+    return sum(results) / float(len(results))
 
 
 def max_from_dict(dictionary):
@@ -66,7 +63,7 @@ def max_from_dict(dictionary):
 def random_rules():
     numbers = [random.random() for _ in xrange(0, 4)]
     numbers_sum = float(sum(numbers))
-    return tuple([round(x / numbers_sum, 2) for x in numbers])
+    return tuple(round(x / numbers_sum, 2) for x in numbers)
 
     # return tuple(round(random.random(), 2) for _ in xrange(0, 4))
 
@@ -88,7 +85,7 @@ def make_son(rules_one, rules_two):
             new_val = 1
         son[random_id] = round(new_val, 2)
 
-    return tuple([round(x / float(sum(son)), 2) for x in son])
+    return tuple(round(x / float(sum(son)), 2) for x in son)
 
 
 def weighted_random_parent(parents_list):

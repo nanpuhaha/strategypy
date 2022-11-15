@@ -60,7 +60,7 @@ class Unit(object):
             'position': self.current_cell,
         }
 
-        ctx.update(self.ctx)
+        ctx |= self.ctx
 
         return ctx
 
@@ -106,7 +106,7 @@ class Unit(object):
             'down': down,
         }
 
-        movement = possible_movements.get(direction, None)
+        movement = possible_movements.get(direction)
         if movement is None:
             return
 
@@ -141,7 +141,7 @@ class Unit(object):
         if six.PY2:
             all_cells = {(x, y) for x in xrange(0, X) for y in xrange(0, Y)}
         else:
-            all_cells = {(x, y) for x in range(0, X) for y in range(0, Y)}
+            all_cells = {(x, y) for x in range(X) for y in range(Y)}
         occupied_cells = self.player.game.occupied_cells
         open_cells = all_cells - set(occupied_cells.keys())
         return random.sample(open_cells, 1)[0]
